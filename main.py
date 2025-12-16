@@ -1,3 +1,4 @@
+from retriever import ensure_collection_exists
 import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,6 +13,8 @@ app = FastAPI(
     description="FastAPI backend for RAG chatbot integrated with Cohere and Qdrant",
     version="1.0.0",
 )
+ensure_collection_exists()
+
 
 # Enable CORS for frontend requests
 app.add_middleware(

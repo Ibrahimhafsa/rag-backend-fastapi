@@ -36,7 +36,7 @@ def retrieve_context(embedding: list[float], top_k: int = 5) -> list[dict]:
     Returns:
         List of dicts with 'content' and 'score' keys
     """
-    ensure_collection_exists()
+    
 
     results = client.search(
         collection_name=COLLECTION_NAME,
