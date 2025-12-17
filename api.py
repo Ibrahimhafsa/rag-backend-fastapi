@@ -36,12 +36,20 @@ Question:
 
 Answer clearly and concisely.
 """
+    
 
     response = client.chat(
-        model="command-r",
-        message=prompt,
-        temperature=0.3,
-    )
+    model="command-r-plus",
+    message=prompt,
+    temperature=0.3,
+)
 
-    return response.generations[0].text
+    return response.text
+
+    
+
+
+    
+    
+
 
