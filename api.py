@@ -1,6 +1,7 @@
 import os
 import cohere
 from pydantic import BaseModel
+
 from embeddings import get_embedding
 from retriever import retrieve_context
 
@@ -39,7 +40,7 @@ Question:
 Answer clearly and concisely.
 """
 
-    # 4. Cohere chat (CORRECT USAGE)
+    # 4. Cohere chat
     response = client.chat(
         model="command-r",
         message=prompt,
