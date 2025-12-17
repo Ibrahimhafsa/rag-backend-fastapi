@@ -8,55 +8,42 @@ client = cohere.Client(os.getenv("COHERE_API_KEY"))
 
 
 class AskRequest(BaseModel):
-    """Request schema for /ask endpoint."""
     question: str
 
 
 class AskResponse(BaseModel):
-    """Response schema for /ask endpoint."""
     answer: str
 
 
 def ask_question(question: str) -> str:
-    """
-    Process a question using RAG pipeline:
-    1. Embed the question with Cohere
-    2. Retrieve relevant context from Qdrant
-    3. Generate answer using Cohere with retrieved context
-
-    Args:
-        question: The user's question
-
-    Returns:
-        Generated answer string
-    """
-    # Step 1: Embed the question
+    # 1. Embed question
     embedding = get_embedding(question)
 
-    # Step 2: Retrieve relevant context
+    # 2. Retrieve context
     context_docs = retrieve_context(embedding, top_k=5)
 
-    # Step 3: Format context for the prompt
     context_text = "\n\n".join(
-        [f"Source: {doc['source']}\n{doc['content']}" for doc in context_docs]
+        [doc["content"] for doc in context_docs if doc["content"]]
     )
 
-    # Step 4: Generate answer using Cohere
-    prompt = f"""You are a helpful assistant for a robotics book documentation site.
-Answer the user's question based on the provided context from the book.
-If the context doesn't contain relevant information, say so honestly.
+    # 3. Prompt
+    prompt = f"""
+You are a helpful assistant for a robotics textbook website.
 
-Context from the book:
+Context:
 {context_text}
 
-User question: {question}
+Question:
+{question}
 
-Answer:"""
+Answer clearly and concisely.
+"""
 
+    # 4. Cohere chat (CORRECT USAGE)
     response = client.chat(
-        model="command-r-v1",
-        messages=[{"role": "user", "content": prompt}],
+        model="command-r",
+        message=prompt,
         temperature=0.3,
     )
 
-    return response.message.content[0].text
+    return response.text
