@@ -17,17 +17,14 @@ class AskResponse(BaseModel):
 
 
 def ask_question(question: str) -> str:
-    # 1. Embed question
     embedding = get_embedding(question)
 
-    # 2. Retrieve context
     context_docs = retrieve_context(embedding, top_k=5)
 
     context_text = "\n\n".join(
         [doc["content"] for doc in context_docs if doc["content"]]
     )
 
-    # 3. Prompt
     prompt = f"""
 You are a helpful assistant for a robotics textbook website.
 
@@ -40,11 +37,11 @@ Question:
 Answer clearly and concisely.
 """
 
-    # 4. Cohere chat
     response = client.chat(
         model="command-r",
         message=prompt,
         temperature=0.3,
     )
 
-    return response.text
+    return response.generations[0].text
+
