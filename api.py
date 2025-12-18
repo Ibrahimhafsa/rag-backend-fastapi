@@ -38,14 +38,14 @@ Answer clearly and concisely.
 """
     
 
-    response = client.generate(
+    response = client.chat(
         model="command-light",
-        prompt=prompt,
+        messages=[{"role": "user", "content": prompt}],
         temperature=0.3,
         max_tokens=500,
     )
 
-    return response.generations[0].text
+    return response.message.content[0].text
 
     
 
