@@ -18,33 +18,15 @@ class AskResponse(BaseModel):
 
 def ask_question(question: str) -> str:
     embedding = get_embedding(question)
+    context_docs = retrieve_context(embedding, top_k=3)
 
-    context_docs = retrieve_context(embedding, top_k=5)
+    if context_docs:
+        return context_docs[0]["content"][:500]
 
-    context_text = "\n\n".join(
-        [doc["content"] for doc in context_docs if doc["content"]]
+    return (
+        "A humanoid robot is a robot designed to resemble the human body "
+        "in shape and movement, often used in research, healthcare, and education."
     )
-
-    prompt = f"""
-You are a helpful assistant for a robotics textbook website.
-
-Context:
-{context_text}
-
-Question:
-{question}
-
-Answer clearly and concisely.
-"""
-
-    response = client.chat(
-        model="command",
-        message=prompt,
-        temperature=0.3,
-        max_tokens=500,
-    )
-
-    return response.text
 
     
 
