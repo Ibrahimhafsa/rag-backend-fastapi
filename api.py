@@ -39,7 +39,7 @@ Answer clearly and concisely.
     
 
     response = client.chat(
-        model="command-r",
+        model="command",
         message=prompt,
         temperature=0.3,
     )
