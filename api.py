@@ -36,16 +36,15 @@ Question:
 
 Answer clearly and concisely.
 """
-    
 
     response = client.chat(
-        model="command-light",
-        messages=[{"role": "user", "content": prompt}],
+        model="command",
+        message=prompt,
         temperature=0.3,
         max_tokens=500,
     )
 
-    return response.message.content[0].text
+    return response.text
 
     
 
